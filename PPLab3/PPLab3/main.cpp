@@ -1,6 +1,7 @@
 #include <iostream>
 #include <time.h>
 #include <iomanip>
+using namespace std;
 
 struct Node{
 	int value;
@@ -9,6 +10,7 @@ struct Node{
 };
 
 Node *root;
+int *minEl = new int(1000);
 void InsertTree(Node **aNode, int data){
 	if (!(*aNode)){		// додаємо новий елемент
 		(*aNode) = new Node;
@@ -24,6 +26,7 @@ void InsertTree(Node **aNode, int data){
 }
 
 void PrintTree(Node *aNode){
+	
 	if (aNode){
 		PrintTree(aNode->left);
 		printf("%d   ",aNode->value);
@@ -32,15 +35,27 @@ void PrintTree(Node *aNode){
 	return;
 }
 
+void searchMinEl(Node *aNode){
+	if (aNode){
+		searchMinEl(aNode->left);
+		if(aNode->value > 0){
+			if(aNode->value < *minEl){
+				*minEl = aNode->value;
+			}
+		}
+		searchMinEl(aNode->right);
+	}
+	return;
+}
+
 int main(){
-	InsertTree(&root, 20);
-	InsertTree(&root, 0);
-	InsertTree(&root, 21);
-	InsertTree(&root, 5);
-	InsertTree(&root, 3);
-	InsertTree(&root, 2);
-	InsertTree(&root, 14);
+	for(int i = 0; i<10; i++){
+		InsertTree(&root, rand() % 100 - 50);
+	}
+	printf("Elements: ");
 	PrintTree(root);
+	searchMinEl(root);
+	printf("\nminimal positive: %d \n", *minEl);
 	system("pause");
 	return 0;
 }
